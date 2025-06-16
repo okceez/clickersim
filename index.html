@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Clicker Game</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="game-container">
+    <div class="left-panel">
+      <div class="achievements-section">
+        <h3>Achievements</h3>
+        <div id="achievements-list" class="achievements-list">
+          <!-- Achievements will be populated here -->
+        </div>
+      </div>
+
+      <div class="leaderboard-section">
+        <h3>Leaderboard</h3>
+        <div id="leaderboard" class="leaderboard">
+          <div class="leader-entry">
+            <span>1. You: <span id="your-score">0</span></span>
+          </div>
+          <div class="leader-entry">
+            <span>2. Bot Alice: 8,432</span>
+          </div>
+          <div class="leader-entry">
+            <span>3. Bot Bob: 6,221</span>
+          </div>
+          <div class="leader-entry">
+            <span>4. Bot Charlie: 4,887</span>
+          </div>
+          <div class="leader-entry">
+            <span>5. Bot Diana: 3,445</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="click-area">
+      <h1>Clicker Game</h1>
+      <div class="player-info">
+        <p>Player: <span id="player-name">Player</span> <button onclick="setPlayerName()" class="small-btn">Change Name</button></p>
+      </div>
+      <p id="click-count">Clicks: 0</p>
+      
+      <!-- Ascension Info -->
+      <div class="ascension-info">
+        <p>Ascension Level: <span id="ascension-level">0</span></p>
+        <p>Ascension Multiplier: <span id="ascension-multiplier">1.0</span>x</p>
+        <p>Ascend Requirement: <span id="ascension-requirement">100,000</span> clicks</p>
+        <button id="ascend-button" disabled>🚀 Ascend</button>
+        <button id="reset-button" class="reset-btn">🔄 Full Reset</button>
+      </div>
+
+      <!-- Daily Challenge -->
+      <div id="daily-challenge" class="daily-challenge">
+        <h4>Daily Challenge</h4>
+        <p id="challenge-text">Click 500 times</p>
+        <div class="progress-bar">
+          <div id="challenge-progress" class="progress-fill"></div>
+        </div>
+        <p>Reward: 1000 clicks</p>
+      </div>
+
+      <!-- Boss Battle -->
+      <div id="boss-battle" class="boss-battle hidden">
+        <h3>Boss Battle!</h3>
+        <div class="boss-image">👹</div>
+        <p id="boss-name">Shadow Beast</p>
+        <div class="boss-health-bar">
+          <div id="boss-health" class="boss-health-fill"></div>
+        </div>
+        <p id="boss-health-text">1000/1000 HP</p>
+        <button id="attack-boss">Attack Boss!</button>
+        <p>Reward: 5000 clicks + Special upgrade</p>
+      </div>
+
+      <div class="click-button-container">
+        <img src="click-button.jpg" id="click-button" alt="Click Button" />
+        <div id="vibration-container"></div>
+      </div>
+    </div>
+
+    <div class="right-panel">
+      <div class="tabs">
+        <button class="tab-button active" data-tab="upgrades">Upgrades</button>
+        <button class="tab-button" data-tab="factory">Factory</button>
+        <button class="tab-button" data-tab="research">Research</button>
+      </div>
+
+      <div id="upgrades-tab" class="tab-content active">
+        <h2>Upgrades</h2>
+        <div class="upgrade">
+          <p>Click Power: <span id="click-power">1</span></p>
+          <p>Cost: <span id="upgrade-cost">50</span></p>
+          <button id="upgrade-button">Upgrade Click</button>
+        </div>
+        <div class="upgrade">
+          <p>Auto Clickers: <span id="auto-clickers">0</span></p>
+          <p>Cost: <span id="auto-cost">200</span></p>
+          <button id="auto-button">Buy Auto Clicker</button>
+        </div>
+        <div class="upgrade">
+          <p>Click Multiplier: <span id="multiplier">1</span>x</p>
+          <p>Cost: <span id="multiplier-cost">500</span></p>
+          <button id="multiplier-button">Buy Multiplier</button>
+        </div>
+      </div>
+
+      <div id="factory-tab" class="tab-content">
+        <h2>Factory</h2>
+        <div class="factory-item">
+          <p>Basic Miners: <span id="miners">0</span></p>
+          <p>+<span id="miner-power">10</span> clicks/sec</p>
+          <p>Cost: <span id="miner-cost">1000</span></p>
+          <button id="buy-miner">Buy Miner</button>
+        </div>
+        <div class="factory-item">
+          <p>Power Drills: <span id="drills">0</span></p>
+          <p>+<span id="drill-power">50</span> clicks/sec</p>
+          <p>Cost: <span id="drill-cost">5000</span></p>
+          <button id="buy-drill">Buy Drill</button>
+        </div>
+        <div class="factory-item">
+          <p>Mega Factories: <span id="factories">0</span></p>
+          <p>+<span id="factory-power">200</span> clicks/sec</p>
+          <p>Cost: <span id="factory-cost">25000</span></p>
+          <button id="buy-factory">Buy Factory</button>
+        </div>
+      </div>
+
+      <div id="research-tab" class="tab-content">
+        <h2>Research Tree</h2>
+        <div class="research-tree">
+          <div class="research-node unlocked" id="efficiency-research">
+            <h4>Efficiency I</h4>
+            <p>+20% click power</p>
+            <p>Cost: 2000</p>
+            <button id="research-efficiency">Research</button>
+          </div>
+          <div class="research-node locked" id="automation-research">
+            <h4>Automation I</h4>
+            <p>+25% auto clicker speed</p>
+            <p>Cost: 5000</p>
+            <button id="research-automation" disabled>Research</button>
+          </div>
+          <div class="research-node locked" id="multiplication-research">
+            <h4>Multiplication I</h4>
+            <p>+50% multiplier effect</p>
+            <p>Cost: 10000</p>
+            <button id="research-multiplication" disabled>Research</button>
+          </div>
+          <div class="research-node locked" id="boss-research">
+            <h4>Boss Hunter</h4>
+            <p>Unlock boss battles</p>
+            <p>Cost: 15000</p>
+            <button id="research-boss" disabled>Research</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Achievement notification -->
+  <div id="achievement-popup" class="achievement-popup">
+    <div class="achievement-content">
+      <h3>🏆 Achievement Unlocked!</h3>
+      <p id="achievement-text"></p>
+    </div>
+  </div>
+
+  <!-- Cheat Menu -->
+  <div id="cheat-menu" class="cheat-menu hidden">
+    <div class="cheat-content">
+      <h3>🎮 Cheat Menu (Drag to Move)</h3>
+      <p>Press Ctrl+Shift+C to toggle</p>
+
+      <div class="cheat-tabs">
+        <button class="cheat-tab-btn active" onclick="showCheatTab('self')">Self</button>
+        <button class="cheat-tab-btn" onclick="showCheatTab('others')">Others</button>
+      </div>
+
+      <div class="cheat-menu-content">
+        <div id="self-cheats" class="cheat-tab-content active">
+          <h4>🔧 Self Cheats</h4>
+          <div class="cheat-section">
+            <label>Clicks:</label>
+            <input type="number" id="cheat-clicks" value="1000">
+            <button id="add-clicks-btn">Add</button>
+            <button id="remove-clicks-btn" class="remove-btn">Remove</button>
+          </div>
+
+          <div class="cheat-section">
+            <label>Click Power:</label>
+            <input type="number" id="cheat-power" value="10">
+            <button id="add-power-btn">Add</button>
+            <button id="remove-power-btn" class="remove-btn">Remove</button>
+          </div>
+
+          <div class="cheat-section">
+            <label>Multiplier:</label>
+            <input type="number" id="cheat-multiplier" value="5">
+            <button id="add-multiplier-btn">Add</button>
+            <button id="remove-multiplier-btn" class="remove-btn">Remove</button>
+          </div>
+
+          <div class="cheat-section">
+            <label>Auto Clickers:</label>
+            <input type="number" id="cheat-auto" value="5">
+            <button id="add-auto-btn">Add</button>
+            <button id="remove-auto-btn" class="remove-btn">Remove</button>
+          </div>
+        </div>
+
+        <div id="others-cheats" class="cheat-tab-content">
+          <h4>👥 Multiplayer Cheats</h4>
+          <div class="cheat-section">
+            <label>Target Player:</label>
+            <input type="text" id="cheat-target-name" placeholder="Enter player name" style="width: 120px;">
+            <button id="clear-target-btn" class="small-btn">Clear</button>
+          </div>
+
+          <div class="cheat-section">
+            <label>Clicks:</label>
+            <input type="number" id="cheat-clicks-other" value="1000">
+            <button id="add-clicks-player-btn">Modify Player</button>
+          </div>
+
+          <div class="cheat-section">
+            <label>Click Power:</label>
+            <input type="number" id="cheat-power-other" value="10">
+            <button id="add-power-player-btn">Modify Player</button>
+          </div>
+
+          <div class="cheat-section">
+            <label>Multiplier:</label>
+            <input type="number" id="cheat-multiplier-other" value="5">
+            <button id="add-multiplier-player-btn">Modify Player</button>
+          </div>
+
+          <div class="cheat-section">
+            <label>Auto Clickers:</label>
+            <input type="number" id="cheat-auto-other" value="5">
+            <button id="add-auto-player-btn">Modify Player</button>
+          </div>
+
+          <p class="cheat-note">💡 Use negative numbers to remove values</p>
+        </div>
+      </div>
+
+      <button id="close-cheat" class="close-btn">Close</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
